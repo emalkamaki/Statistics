@@ -11,7 +11,7 @@ bs_reps_x = dcst.draw_bs_reps(x, np.mean, size=10000)
 # Compute 95% confidence intervals
 conf_int_x = np.percentile(bs_reps_x, [2.5, 97.5])
 
-# Print the results
+# Print the results with one decimal float
 print("""
 x:  mean = {0:.3f} min., conf. int. = [{1:.1f}, {2:.1f}] min.
 """.format(mean_wt, *conf_int_wt))
