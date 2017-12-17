@@ -39,7 +39,7 @@ x_y_concat = np.concatenate((x, y))
 # Compute mean of all: mean_x_y
 mean_x_y = np.mean(x_y_concat)
 
-# Generate shifted arrays
+# Generate shifted arrays of x and y
 x_shifted = x - np.mean(x) + mean_x_y
 y_shifted = y - np.mean(y) + mean_x_y
 
