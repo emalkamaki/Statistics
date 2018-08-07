@@ -5,7 +5,7 @@ from sklearn.model_selection import GridSearchCV
 
 # Setup the hyperparameter grid
 c_space = np.logspace(-5, 8, 15)
-param_grid = {'C': c_space}
+param_grid = {'C': c_space} # also param_grid = {'C': c_space, 'penalty': ['l1', 'l2']}
 
 # Instantiate a logistic regression classifier: logreg
 logreg = LogisticRegression()
