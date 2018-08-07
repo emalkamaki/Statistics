@@ -14,7 +14,7 @@ logreg = LogisticRegression()
 logreg_cv = GridSearchCV(logreg, param_grid, cv=5)
 
 # Fit it to the data
-logreg_cv.fit(X, y)
+logreg_cv.fit(X_train, y_train)
 
 # Print the tuned parameters and score
 print("Tuned Logistic Regression Parameters: {}".format(logreg_cv.best_params_)) 
@@ -39,7 +39,7 @@ tree = DecisionTreeClassifier()
 tree_cv = RandomizedSearchCV(tree, param_dist, cv=5)
 
 # Fit it to the data
-tree_cv.fit(X, y)
+tree_cv.fit(X_train, y_train)
 
 # Print the tuned parameters and score
 print("Tuned Decision Tree Parameters: {}".format(tree_cv.best_params_))
