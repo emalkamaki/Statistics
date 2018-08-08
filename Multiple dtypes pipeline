@@ -114,7 +114,7 @@ pl = Pipeline([
                 ]))
              ]
         )),
-        ('clf', RandomForestClassifier())
+        ('clf', RandomForestClassifier(n_estimators=15))
     ])
 
 # Fit to the training data
