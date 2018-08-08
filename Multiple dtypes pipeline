@@ -1,4 +1,21 @@
 ### When working with both numerical and text data to feed into a model a FeatureUnion and FunctionTransformer are needed
+### The FunctionTransformer for text expects a single column of text to be fed and text columns need to be combined with the following function
+
+# Define combine_text_columns()
+def combine_text_columns(data_frame, to_drop=NUMERIC_COLUMNS + LABELS):
+    """ converts all text in each row of data_frame to single vector """
+    
+    # Drop non-text columns that are in the df
+    to_drop = set(to_drop) & set(data_frame.columns.tolist())
+    text_data = data_frame.drop(to_drop, axis=1)
+    
+    # Replace nans with blanks
+    text_data.fillna("", inplace=True)
+    
+    # Join all text items in a row that have a space in between
+    return text_data.apply(lambda x: " ".join(x), axis=1)
+
+## Beginning of the example code
 # Import FunctionTransformer
 from sklearn.preprocessing import FunctionTransformer
 
@@ -56,3 +73,53 @@ pl.fit(X_train, y_train)
 # Compute and print accuracy
 accuracy = pl.score(X_test, y_test)
 print("\nAccuracy on sample data - all data: ", accuracy)
+
+#### With real data for a multiclassification problem
+
+# Import FunctionTransformer
+from sklearn.preprocessing import FunctionTransformer
+
+# Get the dummy encoding of the labels
+dummy_labels = pd.get_dummies(df[LABELS])
+
+# Get the columns that are features in the original df
+NON_LABELS = [c for c in df.columns if c not in LABELS]
+
+# Split into training and test sets
+X_train, X_test, y_train, y_test = multilabel_train_test_split(df[NON_LABELS],
+                                                               dummy_labels,
+                                                               0.2, 
+                                                               seed=123)
+
+# Preprocess the text data: get_text_data
+get_text_data = FunctionTransformer(combine_text_columns, validate=False)
+
+# Preprocess the numeric data: get_numeric_data
+get_numeric_data = FunctionTransformer(lambda x: x[NUMERIC_COLUMNS], validate=False)
+
+# Import random forest classifer
+from sklearn.ensemble import RandomForestClassifier
+
+# Build/edit model used in the pipeline
+pl = Pipeline([
+        ('union', FeatureUnion(
+            transformer_list = [
+                ('numeric_features', Pipeline([
+                    ('selector', get_numeric_data),
+                    ('imputer', Imputer())
+                ])),
+                ('text_features', Pipeline([
+                    ('selector', get_text_data),
+                    ('vectorizer', CountVectorizer())
+                ]))
+             ]
+        )),
+        ('clf', RandomForestClassifier())
+    ])
+
+# Fit to the training data
+pl.fit(X_train, y_train)
+
+# Compute and print accuracy
+accuracy = pl.score(X_test, y_test)
+print("\nAccuracy on budget dataset: ", accuracy)
