@@ -1,4 +1,4 @@
-#### This function is made by Peter Bull of DrivenData and is meant for multilabel classification 
+#### This function is made by Peter Bull of DrivenData and is meant for multilabel classification  
 # when there is not a sufficient number of each label to use random test train split.
 
 from warnings import warn
