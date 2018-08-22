@@ -1,5 +1,6 @@
 ### Some very basic deep learning model with 'go-to' selections of optimizer and loss-function 
 ### for both regression and classification problems.
+### Good go-to - optimizer: Adam, loss-function: mean_squared_error (regression), categorical_crossentropy (categorical)
 
 # Save the number of columns in predictors: n_cols
 n_cols = predictors.shape[1]
